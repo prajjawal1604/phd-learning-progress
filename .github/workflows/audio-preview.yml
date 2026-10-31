@@ -11,18 +11,26 @@ permissions:
 jobs:
   audio:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-      - name: Install offline speech tools
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: automation/requirements.txt
+      - name: Install Kokoro speech dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y espeak-ng ffmpeg
-      - name: Generate MP3 without external speech APIs
+          python -m pip install -r automation/requirements.txt
+      - name: Generate neural speech MP3
         env:
           LESSON_PATH: ${{ inputs.lesson }}
-        run: python3 automation/narrate.py "$LESSON_PATH"
+          HF_HUB_DISABLE_TELEMETRY: '1'
+        run: python automation/narrate.py "$LESSON_PATH"
       - uses: actions/upload-artifact@v4
         with:
-          name: phd-lesson-audio
+          name: phd-neural-audio
           path: '**/lessons/**/*.mp3'
           if-no-files-found: error
