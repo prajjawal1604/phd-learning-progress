@@ -13,11 +13,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - run: pip install -r automation/requirements.txt
-      - run: python automation/narrate.py "${{ inputs.lesson }}"
+      - name: Install offline speech tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y espeak-ng ffmpeg
+      - name: Generate MP3 without external speech APIs
+        env:
+          LESSON_PATH: ${{ inputs.lesson }}
+        run: python3 automation/narrate.py "$LESSON_PATH"
       - uses: actions/upload-artifact@v4
         with:
           name: phd-lesson-audio
