@@ -37,7 +37,8 @@ jobs:
         run: |
           set -euo pipefail
           if [ "$EVENT_NAME" = "push" ]; then
-            LESSON_PATH="$(git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" | grep -E '^phd-(morning|evening)/lessons/[0-9]{4}-[0-9]{2}-[0-9]{2}/lesson\.md
+            LESSON_PATH="$(git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" | grep -E '^phd-(morning|evening)/lessons/[0-9]{4}-[0-9]{2}-[0-9]{2}/lesson[.]md$' | head -n 1 || true)"
+          elif [ "$EVENT_NAME" = "schedule" ]; then
             DATE="$(TZ=Asia/Kolkata date +%F)"
             if [ "$EVENT_SCHEDULE" = "45 23 * * *" ]; then
               LESSON_PATH="phd-morning/lessons/$DATE/lesson.md"
