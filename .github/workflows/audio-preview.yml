@@ -64,9 +64,11 @@ jobs:
       - name: Publish audio to persistent repository branch
         env:
           AUDIO_PATH: ${{ steps.verify.outputs.audio_path }}
-          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
+          # Keep the generated file outside the working tree before switching branches.
+          TEMP_AUDIO="$(mktemp --suffix=.mp3)"
+          cp -- "$AUDIO_PATH" "$TEMP_AUDIO"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git fetch origin main
@@ -76,9 +78,12 @@ jobs:
           else
             git checkout -B lesson-audio origin/main
           fi
+          mkdir -p "$(dirname "$AUDIO_PATH")"
+          cp -- "$TEMP_AUDIO" "$AUDIO_PATH"
+          rm -f "$TEMP_AUDIO"
           git add -f -- "$AUDIO_PATH"
           if git diff --cached --quiet; then
-            echo "Audio file is already published; no new commit needed."
+            echo "Audio file already published; no commit needed."
           else
             git commit -m "audio: publish verified narration for $AUDIO_PATH"
             git push origin HEAD:lesson-audio
