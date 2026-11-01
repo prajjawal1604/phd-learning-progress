@@ -21,6 +21,13 @@ jobs:
           python-version: '3.11'
           cache: pip
           cache-dependency-path: automation/requirements.txt
+      - name: Cache Kokoro model downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: kokoro-hf-${{ runner.os }}-${{ hashFiles('automation/requirements.txt') }}
+          restore-keys: |
+            kokoro-hf-${{ runner.os }}-
       - name: Install Kokoro speech dependencies
         run: |
           sudo apt-get update
