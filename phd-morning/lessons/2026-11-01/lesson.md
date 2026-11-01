@@ -103,3 +103,5 @@ Next syllabus topics: Autoregressive versus latent-variable models; supervised v
 Source: November 1 morning email. Narration is generated separately by the verified GitHub Actions workflow.
 
 <!-- Integration test: 2026-11-01 morning lesson committed to main to exercise automatic audio generation. -->
+
+<!-- Push-trigger retest after workflow YAML repair; narration source unchanged. -->
