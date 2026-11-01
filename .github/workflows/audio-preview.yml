@@ -8,6 +8,9 @@ on:
         default: ai-for-cybersecurity/lessons/2026-11-01/lesson.md
 permissions:
   contents: write
+concurrency:
+  group: phd-audio-publish
+  cancel-in-progress: false
 jobs:
   audio:
     runs-on: ubuntu-latest
@@ -74,8 +77,12 @@ jobs:
             git checkout -B lesson-audio origin/main
           fi
           git add -f -- "$AUDIO_PATH"
-          git commit -m "audio: publish verified narration for $AUDIO_PATH"
-          git push origin HEAD:lesson-audio
+          if git diff --cached --quiet; then
+            echo "Audio file is already published; no new commit needed."
+          else
+            git commit -m "audio: publish verified narration for $AUDIO_PATH"
+            git push origin HEAD:lesson-audio
+          fi
       - name: Verify remote audio and publish link
         env:
           AUDIO_PATH: ${{ steps.verify.outputs.audio_path }}
