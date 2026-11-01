@@ -1,5 +1,9 @@
 name: PhD audio preview
 on:
+  schedule:
+    # 06:15 and 18:15 IST (UTC+05:30). Runs only when lesson exists.
+    - cron: '45 0 * * *'
+    - cron: '45 12 * * *'
   workflow_dispatch:
     inputs:
       lesson:
@@ -19,6 +23,30 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: true
+      - name: Resolve lesson path
+        id: lesson
+        env:
+          MANUAL_LESSON: ${{ inputs.lesson }}
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_SCHEDULE: ${{ github.event.schedule }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" = "schedule" ]; then
+            DATE="$(TZ=Asia/Kolkata date +%F)"
+            if [ "$EVENT_SCHEDULE" = "45 0 * * *" ]; then
+              LESSON_PATH="phd-morning/lessons/$DATE/lesson.md"
+            else
+              LESSON_PATH="phd-evening/lessons/$DATE/lesson.md"
+            fi
+          else
+            LESSON_PATH="$MANUAL_LESSON"
+          fi
+          if [ ! -s "$LESSON_PATH" ]; then
+            echo "Missing lesson: $LESSON_PATH. Scheduled narration requires committed full lesson text." >&2
+            exit 1
+          fi
+          echo "path=$LESSON_PATH" >> "$GITHUB_OUTPUT"
+          echo "Narrating: $LESSON_PATH" >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -38,12 +66,12 @@ jobs:
           python -m pip install -r automation/requirements.txt
       - name: Generate neural speech MP3
         env:
-          LESSON_PATH: ${{ inputs.lesson }}
+          LESSON_PATH: ${{ steps.lesson.outputs.path }}
           HF_HUB_DISABLE_TELEMETRY: '1'
         run: python automation/narrate.py "$LESSON_PATH"
       - name: Verify generated audio
         env:
-          LESSON_PATH: ${{ inputs.lesson }}
+          LESSON_PATH: ${{ steps.lesson.outputs.path }}
         run: |
           python - <<'PY'
           import os
