@@ -60,7 +60,12 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git fetch origin main
-          git checkout -B lesson-audio origin/main
+          if git ls-remote --exit-code --heads origin lesson-audio >/dev/null 2>&1; then
+            git fetch origin lesson-audio
+            git checkout -B lesson-audio origin/lesson-audio
+          else
+            git checkout -B lesson-audio origin/main
+          fi
           git add -f -- "$AUDIO_PATH"
           git commit -m "audio: publish verified narration for $AUDIO_PATH"
           git push origin HEAD:lesson-audio
