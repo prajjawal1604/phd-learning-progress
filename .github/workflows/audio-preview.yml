@@ -7,13 +7,15 @@ on:
         required: true
         default: ai-for-cybersecurity/lessons/2026-11-01/lesson.md
 permissions:
-  contents: read
+  contents: write
 jobs:
   audio:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -29,8 +31,47 @@ jobs:
           LESSON_PATH: ${{ inputs.lesson }}
           HF_HUB_DISABLE_TELEMETRY: '1'
         run: python automation/narrate.py "$LESSON_PATH"
+      - name: Verify generated audio
+        env:
+          LESSON_PATH: ${{ inputs.lesson }}
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          source = Path(os.environ["LESSON_PATH"])
+          audio = source.with_suffix(".mp3")
+          if not audio.is_file() or audio.stat().st_size < 1000:
+              raise SystemExit("Audio missing or invalid; no delivery link will be issued")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"audio_path={audio.as_posix()}\n")
+          PY
+        id: verify
       - uses: actions/upload-artifact@v4
         with:
           name: phd-neural-audio
-          path: '**/lessons/**/*.mp3'
+          path: ${{ steps.verify.outputs.audio_path }}
           if-no-files-found: error
+      - name: Publish audio to persistent repository branch
+        env:
+          AUDIO_PATH: ${{ steps.verify.outputs.audio_path }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git checkout -B lesson-audio origin/main
+          git add -f -- "$AUDIO_PATH"
+          git commit -m "audio: publish verified narration for $AUDIO_PATH"
+          git push origin HEAD:lesson-audio
+      - name: Verify remote audio and publish link
+        env:
+          AUDIO_PATH: ${{ steps.verify.outputs.audio_path }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git fetch origin lesson-audio
+          git cat-file -e "origin/lesson-audio:$AUDIO_PATH"
+          URL="https://github.com/$GITHUB_REPOSITORY/blob/lesson-audio/$AUDIO_PATH"
+          echo "Verified audio: $URL" >> "$GITHUB_STEP_SUMMARY"
+          echo "Email delivery should link to this URL only after this workflow succeeds." >> "$GITHUB_STEP_SUMMARY"
