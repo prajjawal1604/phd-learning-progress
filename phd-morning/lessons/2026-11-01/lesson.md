@@ -101,3 +101,5 @@ F. Quick self-test
 Next syllabus topics: Autoregressive versus latent-variable models; supervised versus unsupervised versus semi-supervised security learning.
 
 Source: November 1 morning email. Narration is generated separately by the verified GitHub Actions workflow.
+
+<!-- Integration test: 2026-11-01 morning lesson committed to main to exercise automatic audio generation. -->
