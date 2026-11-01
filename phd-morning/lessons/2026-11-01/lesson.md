@@ -105,3 +105,5 @@ Source: November 1 morning email. Narration is generated separately by the verif
 <!-- Integration test: 2026-11-01 morning lesson committed to main to exercise automatic audio generation. -->
 
 <!-- Push-trigger retest after workflow YAML repair; narration source unchanged. -->
+
+<!-- Retest push narration after shallow-checkout path resolution fix. -->
