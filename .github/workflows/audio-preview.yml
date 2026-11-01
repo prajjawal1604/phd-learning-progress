@@ -1,9 +1,14 @@
 name: PhD audio preview
 on:
   schedule:
-    # 06:15 and 18:15 IST (UTC+05:30). Runs only when lesson exists.
-    - cron: '45 0 * * *'
-    - cron: '45 12 * * *'
+    # 05:15 and 17:15 IST (UTC+05:30). Runs only when lesson exists.
+    - cron: '45 23 * * *'
+    - cron: '45 11 * * *'
+  push:
+    branches: [main]
+    paths:
+      - "phd-morning/lessons/**/lesson.md"
+      - "phd-evening/lessons/**/lesson.md"
   workflow_dispatch:
     inputs:
       lesson:
@@ -31,9 +36,110 @@ jobs:
           EVENT_SCHEDULE: ${{ github.event.schedule }}
         run: |
           set -euo pipefail
-          if [ "$EVENT_NAME" = "schedule" ]; then
+          if [ "$EVENT_NAME" = "push" ]; then
+            LESSON_PATH="$(git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" | grep -E '^phd-(morning|evening)/lessons/[0-9]{4}-[0-9]{2}-[0-9]{2}/lesson\.md
             DATE="$(TZ=Asia/Kolkata date +%F)"
-            if [ "$EVENT_SCHEDULE" = "45 0 * * *" ]; then
+            if [ "$EVENT_SCHEDULE" = "45 23 * * *" ]; then
+              LESSON_PATH="phd-morning/lessons/$DATE/lesson.md"
+            else
+              LESSON_PATH="phd-evening/lessons/$DATE/lesson.md"
+            fi
+          else
+            LESSON_PATH="$MANUAL_LESSON"
+          fi
+          if [ ! -s "$LESSON_PATH" ]; then
+            echo "Missing lesson: $LESSON_PATH. Scheduled narration requires committed full lesson text." >&2
+            exit 1
+          fi
+          echo "path=$LESSON_PATH" >> "$GITHUB_OUTPUT"
+          echo "Narrating: $LESSON_PATH" >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: automation/requirements.txt
+      - name: Cache Kokoro model downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: kokoro-hf-${{ runner.os }}-${{ hashFiles('automation/requirements.txt') }}
+          restore-keys: |
+            kokoro-hf-${{ runner.os }}-
+      - name: Install Kokoro speech dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y espeak-ng ffmpeg
+          python -m pip install -r automation/requirements.txt
+      - name: Generate neural speech MP3
+        env:
+          LESSON_PATH: ${{ steps.lesson.outputs.path }}
+          HF_HUB_DISABLE_TELEMETRY: '1'
+        run: python automation/narrate.py "$LESSON_PATH"
+      - name: Verify generated audio
+        env:
+          LESSON_PATH: ${{ steps.lesson.outputs.path }}
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          source = Path(os.environ["LESSON_PATH"])
+          audio = source.with_suffix(".mp3")
+          if not audio.is_file() or audio.stat().st_size < 1000:
+              raise SystemExit("Audio missing or invalid; no delivery link will be issued")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"audio_path={audio.as_posix()}\n")
+          PY
+        id: verify
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phd-neural-audio
+          path: ${{ steps.verify.outputs.audio_path }}
+          if-no-files-found: error
+      - name: Publish audio to persistent repository branch
+        id: publish
+        env:
+          AUDIO_PATH: ${{ steps.verify.outputs.audio_path }}
+        run: |
+          set -euo pipefail
+          # Keep the generated file outside the working tree before switching branches.
+          TEMP_AUDIO="$(mktemp --suffix=.mp3)"
+          mv -- "$AUDIO_PATH" "$TEMP_AUDIO"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          if git ls-remote --exit-code --heads origin lesson-audio >/dev/null 2>&1; then
+            git fetch origin lesson-audio
+            git checkout -B lesson-audio origin/lesson-audio
+          else
+            git checkout -B lesson-audio origin/main
+          fi
+          TIMESTAMP="$(date -u +%Y-%m-%dT%H-%M-%SZ)"
+          PUBLISHED_PATH="${AUDIO_PATH%.mp3}-${TIMESTAMP}-run${GITHUB_RUN_ID}-attempt${GITHUB_RUN_ATTEMPT}.mp3"
+          mkdir -p "$(dirname "$PUBLISHED_PATH")"
+          mv -- "$TEMP_AUDIO" "$PUBLISHED_PATH"
+          echo "published_path=$PUBLISHED_PATH" >> "$GITHUB_OUTPUT"
+          git add -f -- "$PUBLISHED_PATH"
+          if git diff --cached --quiet; then
+            echo "Audio file already published; no commit needed."
+          else
+            git commit -m "audio: publish verified narration for $PUBLISHED_PATH"
+            git push origin HEAD:lesson-audio
+          fi
+      - name: Verify remote audio and publish link
+        env:
+          AUDIO_PATH: ${{ steps.publish.outputs.published_path }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git fetch origin lesson-audio
+          git cat-file -e "origin/lesson-audio:$AUDIO_PATH"
+          URL="https://github.com/$GITHUB_REPOSITORY/blob/lesson-audio/$AUDIO_PATH"
+          echo "Verified audio: $URL" >> "$GITHUB_STEP_SUMMARY"
+          echo "Email delivery should link to this URL only after this workflow succeeds." >> "$GITHUB_STEP_SUMMARY"
+ | head -n 1 || true)"
+          elif [ "$EVENT_NAME" = "schedule" ]; then
+            DATE="$(TZ=Asia/Kolkata date +%F)"
+            if [ "$EVENT_SCHEDULE" = "45 23 * * *" ]; then
               LESSON_PATH="phd-morning/lessons/$DATE/lesson.md"
             else
               LESSON_PATH="phd-evening/lessons/$DATE/lesson.md"
