@@ -1,5 +1,5 @@
 # References index — 2026-11-06 morning
-Companion: [lesson.md](lesson.md). Source syllabus: two PDFs attached to the user's 19 October 2026 PhD coursework Gmail message. They were read during preparation but are **not** copied into this repository.
+Companion: [lesson.md](../lesson.md). Source syllabus: two PDFs attached to the user's 19 October 2026 PhD coursework Gmail message. They were read during preparation but are **not** copied into this repository.
 | ID | Author, title, year | Stable source | Local PDF | Access / summary |
 |---|---|---|---|---|
 | P1 | Vaswani et al., Attention Is All You Need (2017), arXiv:1706.03762 | https://arxiv.org/abs/1706.03762 | Not downloaded | Public arXiv abstract and PDF available; original Transformer and scaled attention. Check PDF license before redistribution. |
