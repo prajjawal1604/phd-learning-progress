@@ -1,0 +1,9 @@
+# References index — 2026-11-06 morning
+Companion: [lesson.md](lesson.md). Source syllabus: two PDFs attached to the user's 19 October 2026 PhD coursework Gmail message. They were read during preparation but are **not** copied into this repository.
+| ID | Author, title, year | Stable source | Local PDF | Access / summary |
+|---|---|---|---|---|
+| P1 | Vaswani et al., Attention Is All You Need (2017), arXiv:1706.03762 | https://arxiv.org/abs/1706.03762 | Not downloaded | Public arXiv abstract and PDF available; original Transformer and scaled attention. Check PDF license before redistribution. |
+| P2 | Dao et al., FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness (2022), arXiv:2205.14135 | https://arxiv.org/abs/2205.14135 | Not downloaded | Public arXiv version; exact tiled attention reducing GPU memory traffic. Redistribution rights not independently checked. |
+| P3 | Ring et al., A Survey of Network-based Intrusion Detection Data Sets (2019), DOI:10.1016/j.cose.2019.06.005 | https://doi.org/10.1016/j.cose.2019.06.005 | Not downloaded | Publisher access/license unverified; survey useful for assessing dataset representativeness; no detailed findings attributed. |
+| P4 | Moustafa and Slay, UNSW-NB15: a comprehensive data set for network intrusion detection systems (2015), DOI:10.1109/MilCIS.2015.7348942 | https://doi.org/10.1109/MilCIS.2015.7348942 | Not downloaded | Publisher access/license unverified; dataset provenance, not a guarantee of real-world generalization. |
+No `references/papers/` PDFs were downloaded; none are claimed. Syllabus documents are private email attachments and have not been redistributed. The lesson's mathematical and simulated claims are explained and reproducible locally.
