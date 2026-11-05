@@ -1,14 +1,5 @@
 name: PhD audio preview
 on:
-  schedule:
-    # 05:15 and 17:15 IST (UTC+05:30). Runs only when lesson exists.
-    - cron: '45 23 * * *'
-    - cron: '45 11 * * *'
-  push:
-    branches: [main]
-    paths:
-      - "phd-morning/lessons/**/lesson.md"
-      - "phd-evening/lessons/**/lesson.md"
   workflow_dispatch:
     inputs:
       lesson:
@@ -22,6 +13,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   audio:
+    if: ${{ false }} # Paused: do not run narration until explicitly re-enabled
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
