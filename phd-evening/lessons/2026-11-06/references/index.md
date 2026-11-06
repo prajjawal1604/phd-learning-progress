@@ -1,0 +1,11 @@
+# Evening references and provenance — 2026-11-06
+Companion: [evening lesson](../lesson.md). Morning dependency: [morning lesson](../../../../phd-morning/lessons/2026-11-06/lesson.md), [morning references](../../../../phd-morning/lessons/2026-11-06/references/index.md). The two private 19 October 2026 Gmail syllabus PDFs are not redistributed.
+
+| ID | Source and canonical link | Local paper path | Access/license and careful use |
+|---|---|---|---|
+| P1 | Vaswani et al. (2017), *Attention Is All You Need*, arXiv:1706.03762, https://arxiv.org/abs/1706.03762 | None | Open arXiv abstract/PDF; redistribution license not checked. Transformer scaled attention; not proof of reliable long-context factual retrieval. |
+| P2 | Dao et al. (2022), *FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness*, arXiv:2205.14135, https://arxiv.org/abs/2205.14135 | None | Open arXiv abstract/PDF; redistribution license not checked. Exact tiled attention reduces IO; not universally linear FLOPs. |
+| P3 | Ring et al. (2019), *A Survey of Network-based Intrusion Detection Data Sets*, DOI:10.1016/j.cose.2019.06.005, https://doi.org/10.1016/j.cose.2019.06.005 | None | Publisher full-text access/license not verified. Use to motivate dataset scrutiny; do not attribute unverified specific results. |
+| P4 | Moustafa & Slay (2015), *UNSW-NB15: a comprehensive data set for network intrusion detection systems*, DOI:10.1109/MilCIS.2015.7348942, https://doi.org/10.1109/MilCIS.2015.7348942 | None | Publisher full-text access/license not verified. Benchmark provenance is not deployment validation. |
+
+**PDF policy:** No paper PDFs were downloaded or committed in this run. `references/papers/` therefore has no newly claimed files. Stable links are supplied instead; license review is required before redistribution. **Source map:** attention equations -> P1; online tiled softmax/IO motivation -> P2 plus local proof; dataset transfer concerns -> P3/P4; cache and decision thresholds -> local arithmetic; toy outcomes -> local code, not external empirical claims. **Validation:** executable examples are designed with assertions and expected results; independent execution must be recorded separately if performed.
