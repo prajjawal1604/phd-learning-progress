@@ -56,7 +56,7 @@ def masked_nll(probabilities, mask):
 response_loss = masked_nll(p_ref,mask)
 all_loss = masked_nll(p_ref,[1]*len(mask))
 assert abs(response_loss - 0.8047189562) < 1e-9
-assert abs(all_loss - 0.3851039) < 1e-9
+assert abs(all_loss - 0.3851038919) < 1e-9
 print("response-only",round(response_loss,6),"ppl",round(math.exp(response_loss),6))
 print("all-token",round(all_loss,6))
 # Single-token softmax gradient p - one_hot(label)
