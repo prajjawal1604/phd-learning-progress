@@ -34,7 +34,7 @@ Z = Σ_{i,t} w_i m_{it}
 ```
 Here N = examples, n_i = response length, w_i = example weight, m_it ∈ {0,1} = included-token indicator, and Z normalizes by included weight. The loss is undefined if Z=0: reject all-masked batches. With vocabulary logits z_j and target class k, p_j=exp(z_j)/Σ_l exp(z_l), and ℓ=−log p_k. Differentiate: ∂ℓ/∂z_j = p_j−1[j=k]. The model is pushed toward the reference next token even if another answer is also valid; this is a central limitation of single-reference SFT.
 
-**Numerical worked example:** one prompt has three tokens (masked), and two response tokens whose reference probabilities are 0.8 and 0.25. Response-only loss = −(ln 0.8+ln 0.25)/2 = **0.804719 nats/token**; perplexity exp(loss)=**2.23607**. If the three prompt positions were accidentally scored with probabilities 0.9, 0.9, 0.9, the five-token loss would be [2×0.1053605+0.2231436+1.3862944]/5 = **0.364032** nats/token; this smaller number is not evidence of better response learning, merely a different denominator/objective. Verify shift: at position t the logits must predict the token at t+1, not copy the token already visible at t.
+**Numerical worked example:** one prompt has three tokens (masked), and two response tokens whose reference probabilities are 0.8 and 0.25. Response-only loss = −(ln 0.8+ln 0.25)/2 = **0.804719 nats/token**; perplexity exp(loss)=**2.23607**. If the three prompt positions were accidentally scored with probabilities 0.9, 0.9, 0.9, the five-token loss would be [2×0.1053605+0.2231436+1.3862944]/5 = **0.385104** nats/token; this smaller number is not evidence of better response learning, merely a different denominator/objective. Verify shift: at position t the logits must predict the token at t+1, not copy the token already visible at t.
 
 **Optimization:** θ_{s+1}=θ_s−η_s ∇_θ L_B, where s is optimizer step, η_s learning rate and L_B minibatch loss. With D workers, microbatch b per worker and a accumulation steps, global batch B=Dba, provided each step includes the same examples per worker. Gradient clipping controls unstable updates but does not ensure truthfulness. SFT can cause catastrophic forgetting: retain a general-task holdout, not only domain validation.
 
@@ -56,7 +56,7 @@ def masked_nll(probabilities, mask):
 response_loss = masked_nll(p_ref,mask)
 all_loss = masked_nll(p_ref,[1]*len(mask))
 assert abs(response_loss - 0.8047189562) < 1e-9
-assert abs(all_loss - 0.3640319775) < 1e-9
+assert abs(all_loss - 0.3851039) < 1e-9
 print("response-only",round(response_loss,6),"ppl",round(math.exp(response_loss),6))
 print("all-token",round(all_loss,6))
 # Single-token softmax gradient p - one_hot(label)
@@ -66,7 +66,7 @@ grad = [probs[0]-1,probs[1]]
 assert all(abs(a-b)<1e-12 for a,b in zip(grad,[-.75,.75]))
 print("gradient",grad)
 ```
-Expected: `response-only 0.804719 ppl 2.236068`; `all-token 0.364032`; `gradient [-0.75, 0.75]` (floating-point representation may vary). **Extension:** implement a tiny bigram conditional model with SGD; compare including versus excluding prompt positions and test on disjoint paraphrase groups. Then create 50 synthetic instruction records with a data card, stable schema and 10 sealed held-out tasks. Report schema validity, exact correctness, evidence entailment and abstention separately. Avoid calling this an LLM SFT benchmark.
+Expected: `response-only 0.804719 ppl 2.236068`; `all-token 0.385104`; `gradient [-0.75, 0.75]` (floating-point representation may vary). **Extension:** implement a tiny bigram conditional model with SGD; compare including versus excluding prompt positions and test on disjoint paraphrase groups. Then create 50 synthetic instruction records with a data card, stable schema and 10 sealed held-out tasks. Report schema validity, exact correctness, evidence entailment and abstention separately. Avoid calling this an LLM SFT benchmark.
 
 ## G4. Concrete operational case and alternatives
 An industrial maintenance assistant must produce `{"component":...,"action":...,"source":...}`. Fine-tuning on 100 labeled examples may improve JSON consistency, but the replacement interval changes monthly. Retrieve the current approved manual by version and user permissions, verify cited span, then render the trained format. If the manual is missing, abstain. Test four conditions: base+prompt, base+RAG, SFT only, SFT+RAG. Hold the model revision, decoding, evaluation set and retrieval corpus version fixed. Report both correct decisions and unsupported claims. An injected document saying “ignore your rules” is data, not authority.
