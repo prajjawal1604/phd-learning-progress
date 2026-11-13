@@ -1,5 +1,5 @@
 # Companion references and paper index — 14 November 2026
-**Syllabus sources (private, not copied into public repository):** 19 October 2026 Gmail message "PhD Coursework Progress, First DAC Review and Ludovika Fellowship 2027"; *Advanced Generative AI and Foundation Models Learning Pathway*, p.8, Unit 3 Session 5; *AI for Cybersecurity Learning Pathway*, p.8, Unit 3 Session 4. Previous local context: [13 Nov morning](../../../../2026-11-13/lesson.md) (see canonical repo path if relative resolution differs) and [13 Nov evening](../../../../../phd-evening/lessons/2026-11-13/lesson.md). The PDFs were accessed through Gmail but are not redistributed.
+**Syllabus sources (private, not copied into public repository):** 19 October 2026 Gmail message "PhD Coursework Progress, First DAC Review and Ludovika Fellowship 2027"; *Advanced Generative AI and Foundation Models Learning Pathway*, p.8, Unit 3 Session 5; *AI for Cybersecurity Learning Pathway*, p.8, Unit 3 Session 4. Previous local context: [13 Nov morning](../../2026-11-13/lesson.md) and [13 Nov evening](../../../../phd-evening/lessons/2026-11-13/lesson.md). The PDFs were accessed through Gmail but are not redistributed.
 
 ## Paper inventory and critical summaries
 | Paper and canonical identifier | What it supports | Limits and access / local path |
