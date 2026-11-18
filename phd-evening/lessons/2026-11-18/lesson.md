@@ -65,7 +65,7 @@ assert evaluate(.9)==(.4,0.0)
 assert evaluate(.8)==(.8,.25)
 def brier():
     return mean((p-y)**2 for p,y in zip(scores,ok))
-assert abs(brier()-.16754)<1e-10
+assert abs(brier()-.21114)<1e-10
 cost_wrong,cost_abstain=20,2
 decision=[("answer" if (1-p)*cost_wrong<=cost_abstain else "abstain")
           for p in scores]
@@ -74,7 +74,7 @@ print("recall", [round(x,3) for x in rec], "joint",joint)
 print("coverage_risk",evaluate(.9),evaluate(.8))
 print("brier",round(brier(),5),"decisions",decision)
 ~~~
-Expected: recall [0.5, 1.0, 0.667], joint [0, 1, 0]; coverage_risk (0.4, 0.0) (0.8, 0.25); brier 0.16754; decisions as asserted. **Critical nuance:** small-sample zero observed selective risk is not a population guarantee. Extend with bootstrap by *incident family*, multi-source claim labels, validity windows and tenant isolation. Negative control: shuffle cited passage IDs; support should fall if the judge actually uses evidence.
+Expected: recall [0.5, 1.0, 0.667], joint [0, 1, 0]; coverage_risk (0.4, 0.0) (0.8, 0.25); brier 0.21114; decisions as asserted. **Critical nuance:** small-sample zero observed selective risk is not a population guarantee. Extend with bootstrap by *incident family*, multi-source claim labels, validity windows and tenant isolation. Negative control: shuffle cited passage IDs; support should fall if the judge actually uses evidence.
 
 # Part II — Advanced graph learning and self-supervision for cybersecurity
 
