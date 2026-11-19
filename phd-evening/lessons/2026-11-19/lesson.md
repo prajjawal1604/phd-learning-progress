@@ -132,10 +132,10 @@ weights=[pi/mu for mu,pi,r in records]
 estimate=sum(w*r for w,(_,_,r) in zip(weights,records))/len(records)
 ess=sum(weights)**2/sum(w*w for w in weights)
 assert abs(estimate-2.4)<1e-12
-assert abs(ess-(19.2**2/131.2))<1e-12
+assert abs(ess-(19.2**2/133.12))<1e-12
 print("posterior",update(.1,.9,.1,True),"IS",round(estimate,2),"ESS",round(ess,3))
 ```
-Expected: `posterior 0.5 IS 2.4 ESS 2.81` (rounded). **Important:** IS can exceed 1 even for rewards in [0,1] in a finite sample; it is not automatically a calibrated probability. Here records are pedagogical weights, not a validated logging process. A proper evaluation also requires a coherent action distribution, independent sampling, positivity and unbiased reward logging. Extension: simulate full behavior policies, compare ordinary versus self-normalized IS, bootstrap intervals, and explicitly remove an action from support to demonstrate non-identifiability.
+Expected: `posterior 0.5 IS 2.4 ESS 2.769` (rounded). **Important:** IS can exceed 1 even for rewards in [0,1] in a finite sample; it is not automatically a calibrated probability. Here records are pedagogical weights, not a validated logging process. A proper evaluation also requires a coherent action distribution, independent sampling, positivity and unbiased reward logging. Extension: simulate full behavior policies, compare ordinary versus self-normalized IS, bootstrap intervals, and explicitly remove an action from support to demonstrate non-identifiability.
 
 ## B5. Architecture for human-supervised adaptive defense
 ```text
