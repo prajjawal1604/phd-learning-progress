@@ -1,0 +1,23 @@
+# Companion references — evening 20 November 2026
+**Dependency:** same-day [morning lesson](../../../../phd-morning/lessons/2026-11-20/lesson.md) and [morning reference index](../../../../phd-morning/lessons/2026-11-20/references/index.md) were fetched from main before authoring. Syllabus: October 19, 2026 Gmail message *PhD Coursework Progress, First DAC Review and Ludovika Fellowship 2027*; two original pathway PDF attachments read, p.12 Unit 5 Session 1 in each.
+
+**Local PDFs:** none committed in this run. No source/version-specific redistribution license was established for the research papers; an arXiv PDF being publicly readable does not alone grant repository redistribution. Thus use canonical links and summaries below; do not infer local paths. If future licensing is confirmed, store as \`references/papers/<arxiv-id>.pdf\` with source URL, license, retrieval date, checksum and attribution in a paper index.
+
+## Canonical references and critical reading
+**[R1]** Alec Radford et al., *Learning Transferable Visual Models From Natural Language Supervision* (2021), ICML, arXiv **2103.00020**. https://arxiv.org/abs/2103.00020 ; https://arxiv.org/pdf/2103.00020 . Canonical arXiv record checked 2026-11-20. **Contribution:** two-tower image-text contrastive training and zero-shot text-defined classification. **Limitation:** semantic alignment cannot establish exact OCR, region localization or calibrated factual truth. **Local PDF:** none.
+**[R2]** Patrick Lewis et al., *Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks* (2020), NeurIPS, arXiv **2005.11401**, https://arxiv.org/abs/2005.11401 . **Contribution:** retrieval-conditioned language generation. **Limitation:** not an authorization-aware SOC validation; retrieved evidence may be stale, irrelevant or untrusted. **Local PDF:** none; identifier inherited from morning reviewed index, not rechecked live.
+**[R3]** Shunyu Yao et al., *ReAct: Synergizing Reasoning and Acting in Language Models* (2022 preprint, ICLR 2023), arXiv **2210.03629**, https://arxiv.org/abs/2210.03629 . **Contribution:** interleaving reasoning traces with actions and observations. **Limitation:** benchmark action success is not proof of safe privileged execution. **Local PDF:** none; identifier inherited from morning reviewed index, not rechecked live.
+**[R4]** Elham Tabassi, *Artificial Intelligence Risk Management Framework (AI RMF 1.0)* (NIST, 2023), NIST AI 100-1, DOI **10.6028/NIST.AI.100-1**, https://doi.org/10.6028/NIST.AI.100-1 ; https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-ai-rmf-10 . Official NIST record checked 2026-11-20. **Contribution:** Govern/Map/Measure/Manage risk functions. **Limitation:** guidance is not empirical assurance for an implementation. **Local PDF:** none.
+**[R5]** OWASP, *Top 10 for Large Language Model Applications* (2025), https://genai.owasp.org/llm-top-10/ . **Contribution:** application threat categories including injection, disclosure and excessive agency. **Limitation:** checklist does not establish effectiveness of any mitigation. **Local PDF:** none; official destination listed, not individually live-verified in this run.
+
+## Claim-to-source map
+- Image/text encoders, normalization, contrastive objective, zero-shot prompts: [R1], lesson Part I mechanism.
+- False-negative gradient, multi-positive derivation, 2×2 example: algebra explicitly derived in lesson Part I and tested by Lab A; these are instructional derivations, not reported empirical results of [R1].
+- Evidence retrieval and generation: [R2], lesson Part II. ACL/time filters and citation verification are **proposed engineering requirements**, not claimed findings of [R2].
+- Agent/tool interaction and limits: [R3], lesson Part II and prior Nov 19 lessons.
+- Governance and prompt-injection threat model: [R4], [R5], lesson Part II and critiques.
+- Bayesian posteriors, conditional-independence warning, selective risk: elementary probability derived in lesson Part II and Lab B; all numbers synthetic.
+- Course placement: both October 19 PDFs, Unit 5 Session 1 p.12, and November 20 morning lesson.
+
+## Access, replication and scope
+The two evening labs use only the Python standard library, synthetic inputs, deterministic assertions and no credentials. They do not train CLIP or run a real SOC. PDF downloads not performed, local paths therefore none. Canonical records for [R1] and [R4] were checked live on 2026-11-20; the other references are stable links from the morning companion index without a fresh per-link check. No audio, email or narration artifacts are created.
