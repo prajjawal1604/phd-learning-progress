@@ -26,7 +26,7 @@ and the posterior mean is
 **tilde_mu_t = [sqrt(A_(t-1)) beta_t/(1-A_t)] x0 + [sqrt(alpha_t)(1-A_(t-1))/(1-A_t)] xt**.
 Check dimensions: every coefficient is scalar; mean is in R^d, covariance is d×d. For t=1, A_0=1 and the posterior conditional on x0 collapses to a point; do not divide by 1-A_0 in a numerical implementation.
 
-**Worked numbers:** beta1=.1, beta2=.2, alpha2=.8, A1=.9, A2=.72. Then tilde_beta2=.2×.1/.28=1/14≈.0714286. Coefficients for x0 and x2 are sqrt(.9)×.2/.28≈.67763 and sqrt(.8)×.1/.28≈.31944. If x0=2 and x2≈1.16764, posterior mean≈1.7283. This is not the same as x0 or the marginal E[x2|x0]. Explain aloud why conditioning on both endpoints reduces uncertainty.
+**Worked numbers:** beta1=.1, beta2=.2, alpha2=.8, A1=.9, A2=.72. Then tilde_beta2=.2×.1/.28=1/14≈.0714286. Coefficients for x0 and x2 are sqrt(.9)×.2/.28≈.67763 and sqrt(.8)×.1/.28≈.31944. If x0=2 and x2≈1.167906, posterior mean≈1.7283. This is not the same as x0 or the marginal E[x2|x0]. Explain aloud why conditioning on both endpoints reduces uncertainty.
 
 Substituting estimated clean data x0_hat=(xt-sqrt(1-A_t)epsilon_theta(xt,t,c))/sqrt(A_t) into tilde_mu gives the common DDPM mean
 mu_theta=(xt-beta_t epsilon_theta/sqrt(1-A_t))/sqrt(alpha_t).
