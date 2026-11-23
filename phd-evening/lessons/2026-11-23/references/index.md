@@ -1,0 +1,18 @@
+# Evening references index — 23 November 2026
+Parent: [complete evening teaching package](../lesson.md). Morning dependencies: [lesson](../../../../phd-morning/lessons/2026-11-23/lesson.md), [references](../../../../phd-morning/lessons/2026-11-23/references/index.md). Syllabus: 19 October 2026 Gmail attachments *Advanced_Generative_AI_and_Foundation_Models_Learning_Pathway.pdf* and *AI_for_Cybersecurity_Learning_Pathway.pdf*, each page 12, Unit 5 Session 4.
+
+|ID|Canonical citation and link|What it establishes; critique|Local PDF / rights|
+|---|---|---|---|
+|R1|Graves, A., Fernández, S., Gomez, F., Schmidhuber, J. (2006). *Connectionist Temporal Classification: Labelling Unsegmented Sequence Data with Recurrent Neural Networks*. ICML. DOI [10.1145/1143844.1143891](https://doi.org/10.1145/1143844.1143891)|Monotonic blank-based path marginalization and dynamic programming; not speaker verification or semantic safety.|None; publisher DOI, repository redistribution rights not verified.|
+|R2|Radford, A. et al. (2023). *Robust Speech Recognition via Large-Scale Weak Supervision*. ICML. arXiv [2212.04356](https://arxiv.org/abs/2212.04356)|Large-scale weak supervision for ASR; reported benchmark results do not certify rare high-stakes commands.|None; arXiv reading available; version-specific redistribution rights not verified.|
+|R3|Pearce, H. et al. (2022). *Asleep at the Keyboard? Assessing the Security of GitHub Copilot's Code Contributions*. IEEE S&P. arXiv [2108.09293](https://arxiv.org/abs/2108.09293)|Security of generated code on controlled prompts; not evidence about every contemporary code-review model.|None; rights not verified.|
+|R4|NIST (2023). *Artificial Intelligence Risk Management Framework (AI RMF 1.0)*. NIST AI 100-1. DOI [10.6028/NIST.AI.100-1](https://doi.org/10.6028/NIST.AI.100-1)|Govern, Map, Measure, Manage; governance framework, not a specific deployment certification.|None; official public document, redistribution not evaluated.|
+|R5|Ho, J., Jain, A., Abbeel, P. (2020). *Denoising Diffusion Probabilistic Models*. NeurIPS. arXiv [2006.11239](https://arxiv.org/abs/2006.11239)|Generative diffusion context from prior day, not proof of authenticity.|None; rights not verified.|
+|R6|Rombach, R. et al. (2022). *High-Resolution Image Synthesis with Latent Diffusion Models*. CVPR. arXiv [2112.10752](https://arxiv.org/abs/2112.10752)|Latent compression and conditioning, not forensic provenance.|None; rights not verified.|
+
+## Source map and reproducibility
+CTC recurrence/gradient: lesson §1, Lab A, R1. Speech model limits: §1/§3, R2. Video hit probability and drift: §2, explicit derivation, not a published benchmark. SQL taint and authorized tests: §4, §6, Lab B; R3 provides context, not proof of the toy case. Base-rate precision and prior correction: §5, Lab B, independently derived here. Synthetic privacy and oversight: §5–8, R4. Media authenticity distinction: §3, §7; R5/R6 provide generative context only.
+
+**Paper index and access log:** No paper PDF was downloaded or committed under `references/papers/`. All local paper paths: **none**. Canonical links above are stable reading routes; a publicly readable manuscript is not automatically redistributable. Before committing PDFs, verify the precise version's license, source URL, download date and SHA-256, and record them here. Bibliographic identifiers were cross-referenced with the morning index; independent live checks of every destination are not claimed.
+
+**Validation:** Two standard-library-only labs include assertions and deterministic expected output. Full end-to-end execution has not been independently established. This index and lesson introduce no production operations, email, narration or audio.
